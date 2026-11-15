@@ -7,7 +7,7 @@ public class DBConnection {
     private final String serverName = "localhost";
     private final String dbName = "ShoppingServiceMVC";
     private final String portNumber = "1433";
-    private final String instance = "SQLEXPRESS"; // Instance SQL Server 2022 Express trên máy bạn
+    private final String instance = "SQLEXPRESS"; 
     private final String userID = "sa";
     private final String password = "1234@a$"; // Mật khẩu sa đã kiểm tra thành công
 

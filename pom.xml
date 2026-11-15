@@ -14,7 +14,6 @@
     </properties>
 
     <dependencies>
-        <!-- Jakarta Servlet API 6.1.0 (Tomcat 10.1 tương thích Servlet 6.0+) -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>

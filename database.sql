@@ -54,7 +54,7 @@ BEGIN
 END
 GO
 
--- 4. Dữ liệu mẫu cho sinh viên Trần Hữu Việt Huân
+-- 4. Dữ liệu mẫu
 -- Tài khoản Admin
 IF NOT EXISTS (SELECT 1 FROM dbo.[User] WHERE [username] = 'admin')
 BEGIN
