@@ -26,7 +26,7 @@ bằng Java Servlet, JSP và mô hình MVC.
 ## 5. Truy cập website
 http://localhost:8080/ShoppingServletServiceMVC/login
 
-## 7. Tài khoản thử nghiệm
+## 6. Tài khoản thử nghiệm
 Tài khoản: admin
 Mật khẩu: 123456
 
