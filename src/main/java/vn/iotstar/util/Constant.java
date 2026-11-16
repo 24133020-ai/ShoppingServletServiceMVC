@@ -8,11 +8,29 @@ public class Constant {
     public static final String SESSION_USERNAME = "username";
     public static final String COOKIE_REMEMBER = "username";
 
+    // Session key lưu email đang chờ xác thực OTP (kích hoạt / quên mật khẩu)
+    public static final String SESSION_OTP_EMAIL = "otpEmail";
+    public static final String SESSION_RESET_EMAIL = "resetEmail";
+
+    // OTP
+    public static final String PURPOSE_ACTIVATE = "ACTIVATE";
+    public static final String PURPOSE_RESET = "RESET";
+    public static final int OTP_LENGTH = 6;
+    public static final int OTP_EXPIRE_MINUTES = 5;      // OTP có hiệu lực 5 phút
+    public static final int OTP_MAX_ATTEMPTS = 5;        // nhập sai tối đa 5 lần
+    public static final int OTP_RESEND_SECONDS = 60;     // gửi lại tối thiểu cách nhau 60 giây
+
+    // Mật khẩu
+    public static final int PASSWORD_MIN_LENGTH = 6;
+
     // View paths
     public static final String REGISTER = "/views/register.jsp";
 
     public static class Path {
         public static final String REGISTER = "/views/register.jsp";
         public static final String LOGIN = "/views/login.jsp";
+        public static final String VERIFY_OTP = "/views/verify-otp.jsp";
+        public static final String FORGOT_PASSWORD = "/views/forgot-password.jsp";
+        public static final String RESET_PASSWORD = "/views/reset-password.jsp";
     }
 }

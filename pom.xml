@@ -74,6 +74,13 @@
             <version>3.0.2</version>
         </dependency>
 
+        <!-- Gửi email OTP qua SMTP (Jakarta Mail - Angus Mail, tương thích Tomcat 10.1) -->
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
         <!-- Lombok hỗ trợ sinh tự động Getter/Setter/Constructor -->
         <dependency>
             <groupId>org.projectlombok</groupId>

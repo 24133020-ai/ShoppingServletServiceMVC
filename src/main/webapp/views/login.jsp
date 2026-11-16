@@ -50,6 +50,9 @@
     <div class="login-box">
         <h2 class="login-title">Đăng Nhập Vào Hệ Thống</h2>
 
+        <c:if test="${success != null}">
+            <div class="alert alert-success">${success}</div>
+        </c:if>
         <c:if test="${alert != null}">
             <div class="alert alert-danger">${alert}</div>
         </c:if>
@@ -58,7 +61,7 @@
             <section class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" placeholder="Tài khoản" name="username" class="form-control" required />
+                    <input type="text" placeholder="Tài khoản" name="username" class="form-control" value="<c:out value='${rememberedUsername}'/>" required />
                 </div>
             </section>
 
@@ -72,11 +75,11 @@
             <div class="form-group clearfix">
                 <div class="pull-left">
                     <label>
-                        <input type="checkbox" name="remember"> Nhớ tôi
+                        <input type="checkbox" name="remember" ${rememberedUsername != null ? 'checked' : ''}> Nhớ tôi
                     </label>
                 </div>
                 <div class="pull-right">
-                    <a href="#">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                 </div>
             </div>
 

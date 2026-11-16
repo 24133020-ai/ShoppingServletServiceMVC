@@ -1,0 +1,15 @@
+# Build output
+target/
+*.class
+*.war
+
+# IDE
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.vscode/
+
+# Cấu hình chứa mật khẩu email - KHÔNG commit
+src/main/resources/mail.properties

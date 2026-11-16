@@ -2,6 +2,7 @@ package vn.iotstar.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,7 +23,7 @@ public class User implements Serializable {
     @Column(name = "fullname", columnDefinition = "NVARCHAR(100) NOT NULL")
     private String fullName;
 
-    @Column(name = "password", columnDefinition = "NVARCHAR(100) NOT NULL")
+    @Column(name = "password", columnDefinition = "NVARCHAR(255) NOT NULL")
     private String passWord;
 
     @Column(name = "avatar", columnDefinition = "NVARCHAR(255) NULL")
@@ -36,6 +37,23 @@ public class User implements Serializable {
 
     @Column(name = "createdDate")
     private Date createdDate;
+
+    // Tài khoản đã kích hoạt bằng OTP chưa (tài khoản cũ mặc định = 1)
+    @Column(name = "active", columnDefinition = "BIT NOT NULL DEFAULT 1")
+    private boolean active = true;
+
+    // Thông tin OTP hiện hành (kích hoạt hoặc quên mật khẩu)
+    @Column(name = "otpCode", columnDefinition = "NVARCHAR(10) NULL")
+    private String otpCode;
+
+    @Column(name = "otpPurpose", columnDefinition = "NVARCHAR(20) NULL")
+    private String otpPurpose;
+
+    @Column(name = "otpExpiry")
+    private LocalDateTime otpExpiry;
+
+    @Column(name = "otpAttempts", columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int otpAttempts;
 
     public User() {
     }
@@ -157,5 +175,45 @@ public class User implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
+    }
+
+    public String getOtpPurpose() {
+        return otpPurpose;
+    }
+
+    public void setOtpPurpose(String otpPurpose) {
+        this.otpPurpose = otpPurpose;
+    }
+
+    public LocalDateTime getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(LocalDateTime otpExpiry) {
+        this.otpExpiry = otpExpiry;
+    }
+
+    public int getOtpAttempts() {
+        return otpAttempts;
+    }
+
+    public void setOtpAttempts(int otpAttempts) {
+        this.otpAttempts = otpAttempts;
     }
 }

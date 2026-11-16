@@ -20,12 +20,12 @@ public class LogoutController extends HttpServlet {
             session.invalidate();
         }
 
-        // Xóa cookie remember me
+        // Xóa cookie "Nhớ tôi" (cùng path với lúc tạo)
         Cookie cookie = new Cookie(Constant.COOKIE_REMEMBER, "");
         cookie.setMaxAge(0);
-        cookie.setPath("/");
+        cookie.setPath(req.getContextPath().isEmpty() ? "/" : req.getContextPath());
         resp.addCookie(cookie);
 
-        resp.sendRedirect(req.getContextPath() + "/login");
+        resp.sendRedirect(req.getContextPath() + "/login?msg=logout");
     }
 }

@@ -47,6 +47,42 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getByEmail(String email) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.email = :email";
+            TypedQuery<User> query = enma.createQuery(jpql, User.class);
+            query.setParameter("email", email);
+            List<User> list = query.getResultList();
+            return list.isEmpty() ? null : list.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
+        try {
+            trans.begin();
+            enma.merge(user);
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (trans.isActive()) {
+                trans.rollback();
+            }
+            throw e;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
     public boolean checkExistEmail(String email) {
         EntityManager enma = JpaConfig.getEntityManager();
         try {
