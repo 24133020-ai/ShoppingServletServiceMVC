@@ -1,6 +1,7 @@
 package vn.iotstar.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
@@ -28,10 +29,19 @@ public class Video implements Serializable {
     @Column(name = "views")
     private int views;
 
+    // Ngày đăng video, dùng để sắp xếp "video mới nhất"
+    @Column(name = "createdDate")
+    private LocalDateTime createdDate;
+
     // bi-directional many-to-one association to Category
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category categories;
+
+    // bi-directional many-to-one association to User (1 user có nhiều video)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
     public Video() {
     }
@@ -90,5 +100,21 @@ public class Video implements Serializable {
 
     public void setCategory(Category category) {
         this.categories = category;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -16,7 +16,7 @@ import vn.iotstar.entity.User;
  * Chặn truy cập khi chưa đăng nhập (hoặc sai quyền) và tắt cache các trang đã bảo vệ,
  * để sau khi đăng xuất bấm nút Back không xem lại được trang cũ.
  */
-@WebFilter(urlPatterns = { "/admin/*", "/views/admin/*", "/home" })
+@WebFilter(urlPatterns = { "/admin/*", "/views/admin/*", "/home", "/video", "/video/*" })
 public class AuthFilter implements Filter {
 
     @Override

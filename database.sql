@@ -63,7 +63,7 @@ BEGIN
 END
 GO
 
--- 3. Bảng videos có quan hệ 1-N với categories (JPA Entity Video)
+-- 3. Bảng videos: quan hệ 1-N với categories và 1-N với [User] (mỗi user có nhiều video) (JPA Entity Video)
 IF OBJECT_ID('dbo.videos', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.videos(
@@ -73,9 +73,19 @@ BEGIN
         [poster] NVARCHAR(500) NULL,
         [title] NVARCHAR(255) NULL,
         [views] INT NOT NULL DEFAULT 0,
-        [categoryId] INT FOREIGN KEY REFERENCES dbo.categories([categoryId]) ON DELETE CASCADE
+        [categoryId] INT FOREIGN KEY REFERENCES dbo.categories([categoryId]) ON DELETE CASCADE,
+        [userId] INT NULL CONSTRAINT FK_videos_User FOREIGN KEY REFERENCES dbo.[User]([id]), -- video thuộc về user nào
+        [createdDate] DATETIME2 NULL                                                        -- ngày đăng video
     );
 END
+GO
+
+-- Nâng cấp bảng videos đã tồn tại: thêm khóa ngoại tới [User] và ngày đăng (chạy lặp lại vẫn an toàn)
+IF COL_LENGTH('dbo.videos', 'userId') IS NULL
+    ALTER TABLE dbo.videos ADD [userId] INT NULL CONSTRAINT FK_videos_User FOREIGN KEY REFERENCES dbo.[User]([id]);
+GO
+IF COL_LENGTH('dbo.videos', 'createdDate') IS NULL
+    ALTER TABLE dbo.videos ADD [createdDate] DATETIME2 NULL;
 GO
 
 -- 4. Dữ liệu mẫu

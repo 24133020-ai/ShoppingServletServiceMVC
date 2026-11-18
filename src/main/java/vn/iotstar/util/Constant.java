@@ -23,6 +23,10 @@ public class Constant {
     // Mật khẩu
     public static final int PASSWORD_MIN_LENGTH = 6;
 
+    // Video
+    public static final int HOME_VIDEO_COUNT = 10;   // trang chủ hiển thị 10 video mới nhất
+    public static final int VIDEO_PAGE_SIZE = 6;     // trang /video phân trang 6 video / trang
+
     // View paths
     public static final String REGISTER = "/views/register.jsp";
 
@@ -32,5 +36,9 @@ public class Constant {
         public static final String VERIFY_OTP = "/views/verify-otp.jsp";
         public static final String FORGOT_PASSWORD = "/views/forgot-password.jsp";
         public static final String RESET_PASSWORD = "/views/reset-password.jsp";
+        public static final String VIDEO_LIST = "/views/video-list.jsp";
+        public static final String VIDEO_ADD = "/views/video-add.jsp";
+        public static final String VIDEO_EDIT = "/views/video-edit.jsp";
+        public static final String VIDEO_DETAIL = "/views/video-detail.jsp";
     }
 }

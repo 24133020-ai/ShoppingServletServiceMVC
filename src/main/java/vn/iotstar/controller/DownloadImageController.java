@@ -18,11 +18,15 @@ public class DownloadImageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String fileName = req.getParameter("fname");
-        if (fileName == null || fileName.isEmpty()) {
+        if (fileName == null || fileName.isEmpty() || fileName.contains("..")
+                || fileName.contains("/") || fileName.contains("\\")) {
             return;
         }
 
         File file = new File(Constant.DIR + File.separator + "category" + File.separator + fileName);
+        if (!file.exists()) {
+            file = new File(Constant.DIR + File.separator + "video" + File.separator + fileName);
+        }
         if (!file.exists()) {
             file = new File(Constant.DIR + File.separator + fileName);
         }

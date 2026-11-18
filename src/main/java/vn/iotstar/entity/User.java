@@ -3,6 +3,8 @@ package vn.iotstar.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
@@ -54,6 +56,10 @@ public class User implements Serializable {
 
     @Column(name = "otpAttempts", columnDefinition = "INT NOT NULL DEFAULT 0")
     private int otpAttempts;
+
+    // bi-directional one-to-many association to Video (1 user có nhiều video)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Video> videos = new ArrayList<>();
 
     public User() {
     }
@@ -215,5 +221,13 @@ public class User implements Serializable {
 
     public void setOtpAttempts(int otpAttempts) {
         this.otpAttempts = otpAttempts;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 }

@@ -9,6 +9,10 @@ bằng Java Servlet, JSP và mô hình MVC.
 - Đăng nhập với **mật khẩu được mã hóa (PBKDF2-HMAC-SHA256 + salt)** và đăng xuất
 - **Quên mật khẩu**: nhận mã OTP qua email để đặt lại mật khẩu
 - Phân quyền người dùng (AuthFilter chặn truy cập khi chưa đăng nhập / sai quyền)
+- Quản lý video: thêm, sửa, xóa video của user (bảng `videos` quan hệ 1-N với `User`), upload poster bằng Multipart
+- Trang chủ `/home` hiển thị 10 video mới nhất
+- Trang `/video` hiển thị tất cả video của user, phân trang 6 video / trang
+- Xem chi tiết và play video khi bấm vào tiêu đề (`/video/detail?id=...`)
 - Quản lý danh mục sản phẩm
 - Thêm, sửa, xóa và xem danh sách danh mục
 - Upload hình ảnh danh mục
@@ -56,10 +60,13 @@ Nếu chưa cấu hình, ứng dụng chạy chế độ DEV: mã OTP được i
 http://localhost:8080/ShoppingServletServiceMVC/login
 
 ## 7. Tài khoản thử nghiệm
-Tài khoản: admin
+Tài khoản để  test danh mục sản phẩm: admin
 Mật khẩu: 123456
 
-Tài khoản: viethuan
+Tài khoản này cũng là admin nhưng dùng tên khác: viethuan
+Mật khẩu: 123456
+
+Tài khoản user để kiểm tra về phần video: hi
 Mật khẩu: 123456
 
 (Mật khẩu trong database đã được băm, các tài khoản mới đăng ký phải kích hoạt bằng OTP.)
