@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang chủ Người Dùng</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body style="padding-top: 50px;">
 <div class="container">

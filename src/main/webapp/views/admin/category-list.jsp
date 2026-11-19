@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý danh mục - JPA Hibernate</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f0f3f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header-bar { background-color: #0088cc; color: #fff; padding: 12px 25px; }
         .header-bar h3 { margin: 0; font-size: 22px; font-weight: bold; }
@@ -53,6 +51,9 @@
 
         <!-- Main Content -->
         <div class="col-md-10 col-sm-9 main-content">
+            <c:if test="${alert != null}">
+                <div class="alert alert-danger"><c:out value="${alert}"/></div>
+            </c:if>
             <div class="row">
                 <div class="col-md-8">
                     <h2 style="margin-top: 0; color: #d9534f; font-weight: bold;">Quản lý danh mục (JPA CRUD)</h2>

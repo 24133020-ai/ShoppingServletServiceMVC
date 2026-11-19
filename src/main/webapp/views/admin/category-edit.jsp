@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chỉnh sửa Category - JPA Hibernate</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f0f3f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header-bar { background-color: #0088cc; color: #fff; padding: 12px 25px; }
         .header-bar h3 { margin: 0; font-size: 22px; font-weight: bold; }
@@ -59,17 +57,22 @@
             <div class="panel panel-default" style="max-width: 600px;">
                 <div class="panel-heading"><strong>Chỉnh sửa Category</strong></div>
                 <div class="panel-body">
+                    <c:if test="${alert != null}">
+                        <div class="alert alert-danger"><c:out value="${alert}"/></div>
+                    </c:if>
                     <form action="<c:url value='/admin/category/update'/>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="categoryid" value="${cate.categoryId}">
 
                         <div class="form-group">
                             <label for="categoryname">Category name:</label>
-                            <input type="text" class="form-control" id="categoryname" name="categoryname" value="${cate.categoryname}" required>
+                            <input type="text" class="form-control" id="categoryname" name="categoryname"
+                                   value="<c:out value='${cate.categoryname}'/>" minlength="2" maxlength="255" required>
                         </div>
 
                         <div class="form-group">
                             <label for="images">Link images:</label>
-                            <input type="text" class="form-control" id="images" name="images" value="${cate.images}">
+                            <input type="text" class="form-control" id="images" name="images" maxlength="500"
+                                   value="<c:out value='${cate.images}'/>">
                         </div>
 
                         <div class="form-group">
@@ -85,13 +88,14 @@
                             <img class="img-preview" src="${imgUrl}" alt="${cate.categoryname}" onerror="this.src='https://via.placeholder.com/140x100?text=No+Image'"><br>
 
                             <label for="images1">Upload images mới (để trống nếu giữ ảnh cũ):</label>
-                            <input type="file" class="form-control" id="images1" name="images1">
+                            <input type="file" class="form-control" id="images1" name="images1" accept="image/png,image/jpeg,image/gif,image/webp">
+                            <small class="help-block">Chỉ nhận PNG, JPG, JPEG, GIF hoặc WEBP; tối đa 5MB. Để trống nếu giữ ảnh hiện tại.</small>
                         </div>
 
                         <div class="form-group">
                             <label>Status:</label><br>
                             <label class="radio-inline">
-                                <input type="radio" id="ston" name="status" value="1" ${cate.status == 1 ? 'checked' : ''}> Hoạt động
+                                <input type="radio" id="ston" name="status" value="1" ${cate.status == 1 ? 'checked' : ''} required> Hoạt động
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" id="stoff" name="status" value="0" ${cate.status != 1 ? 'checked' : ''}> Khóa

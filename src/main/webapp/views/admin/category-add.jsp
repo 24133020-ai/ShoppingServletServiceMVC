@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Thêm Category - JPA Hibernate</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f0f3f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header-bar { background-color: #0088cc; color: #fff; padding: 12px 25px; }
         .header-bar h3 { margin: 0; font-size: 22px; font-weight: bold; }
@@ -58,29 +56,36 @@
             <div class="panel panel-default" style="max-width: 600px;">
                 <div class="panel-heading"><strong>Thông tin Category</strong></div>
                 <div class="panel-body">
+                    <c:if test="${alert != null}">
+                        <div class="alert alert-danger"><c:out value="${alert}"/></div>
+                    </c:if>
                     <form action="<c:url value='/admin/category/insert'/>" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="categoryname">Category name:</label>
-                            <input type="text" class="form-control" id="categoryname" name="categoryname" placeholder="Nhập tên danh mục" required />
+                            <input type="text" class="form-control" id="categoryname" name="categoryname" placeholder="Nhập tên danh mục"
+                                   minlength="2" maxlength="255" value="<c:out value='${formCategoryName}'/>" required />
                         </div>
 
                         <div class="form-group">
                             <label for="images">Link images (hoặc URL trực tuyến):</label>
-                            <input type="text" class="form-control" id="images" name="images" placeholder="https://example.com/image.png" />
+                            <input type="text" class="form-control" id="images" name="images" maxlength="500"
+                                   placeholder="https://example.com/image.png hoặc avatar.png"
+                                   value="<c:out value='${formImage}'/>" />
                         </div>
 
                         <div class="form-group">
                             <label for="images1">Upload images (từ máy tính):</label>
-                            <input type="file" class="form-control" id="images1" name="images1" />
+                            <input type="file" class="form-control" id="images1" name="images1" accept="image/png,image/jpeg,image/gif,image/webp" />
+                            <small class="help-block">Chỉ nhận PNG, JPG, JPEG, GIF hoặc WEBP; tối đa 5MB.</small>
                         </div>
 
                         <div class="form-group">
                             <label>Status:</label><br/>
                             <label class="radio-inline">
-                                <input type="radio" id="ston" name="status" value="1" checked /> Hoạt động
+                                <input type="radio" id="ston" name="status" value="1" ${empty formStatus || formStatus == '1' ? 'checked' : ''} required /> Hoạt động
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" id="stoff" name="status" value="0" /> Khóa
+                                <input type="radio" id="stoff" name="status" value="0" ${formStatus == '0' ? 'checked' : ''} /> Khóa
                             </label>
                         </div>
 

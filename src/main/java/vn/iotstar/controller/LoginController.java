@@ -16,6 +16,7 @@ import vn.iotstar.service.UserService;
 import vn.iotstar.service.UserService.OtpResult;
 import vn.iotstar.service.impl.UserServiceImpl;
 import vn.iotstar.util.Constant;
+import vn.iotstar.util.FormValidationUtil;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/login")
@@ -59,11 +60,15 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         boolean isRememberMe = "on".equals(req.getParameter("remember"));
 
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            showError(req, resp, username, "Tài khoản hoặc mật khẩu không được rỗng");
+        username = username == null ? "" : username.trim();
+        if (!FormValidationUtil.hasText(username) || username.length() > 50) {
+            showError(req, resp, username, "Vui lòng nhập tài khoản hợp lệ (tối đa 50 ký tự).");
             return;
         }
-        username = username.trim();
+        if (!FormValidationUtil.hasText(password) || password.length() > 128) {
+            showError(req, resp, username, "Vui lòng nhập mật khẩu (tối đa 128 ký tự).");
+            return;
+        }
 
         User user = service.login(username, password);
         if (user == null) {

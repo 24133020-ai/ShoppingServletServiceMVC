@@ -10,6 +10,7 @@ import vn.iotstar.service.UserService;
 import vn.iotstar.service.UserService.OtpResult;
 import vn.iotstar.service.impl.UserServiceImpl;
 import vn.iotstar.util.Constant;
+import vn.iotstar.util.FormValidationUtil;
 
 /** Bước 1 quên mật khẩu: nhập email để nhận OTP. */
 @SuppressWarnings("serial")
@@ -28,15 +29,17 @@ public class ForgotPasswordController extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         String email = req.getParameter("email");
-        if (email == null || email.trim().isEmpty()) {
-            req.setAttribute("alert", "Vui lòng nhập email!");
+        email = FormValidationUtil.safeTrim(email).toLowerCase();
+        if (!FormValidationUtil.isEmail(email)) {
+            req.setAttribute("alert", "Vui lòng nhập địa chỉ email hợp lệ.");
+            req.setAttribute("formEmail", email);
             req.getRequestDispatcher(Constant.Path.FORGOT_PASSWORD).forward(req, resp);
             return;
         }
-        email = email.trim().toLowerCase();
 
         OtpResult r = service.sendOtp(email, Constant.PURPOSE_RESET);
         if (r == OtpResult.MAIL_ERROR) {
+            req.setAttribute("formEmail", email);
             req.setAttribute("alert", "Không gửi được email. Vui lòng thử lại sau.");
             req.getRequestDispatcher(Constant.Path.FORGOT_PASSWORD).forward(req, resp);
             return;

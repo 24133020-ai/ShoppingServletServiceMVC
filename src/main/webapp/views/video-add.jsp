@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Thêm Video</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f0f3f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header-bar { background-color: #0088cc; color: #fff; padding: 12px 25px; }
         .header-bar h3 { margin: 0; font-size: 22px; font-weight: bold; }
@@ -41,31 +39,34 @@
         <div class="panel-heading"><strong>Thông tin Video</strong></div>
         <div class="panel-body">
             <c:if test="${alert != null}">
-                <div class="alert alert-danger">${alert}</div>
+                <div class="alert alert-danger"><c:out value="${alert}"/></div>
             </c:if>
             <form action="<c:url value='/video/insert'/>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="videoId">Video ID (mã video YouTube):</label>
                     <input type="text" class="form-control" id="videoId" name="videoId" maxlength="50"
+                           pattern="[A-Za-z0-9_-]{1,50}" title="Chỉ gồm chữ không dấu, số, dấu gạch ngang và gạch dưới."
                            placeholder="Ví dụ: dQw4w9WgXcQ" value="<c:out value='${video.videoId}'/>" required />
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" maxlength="255"
+                    <input type="text" class="form-control" id="title" name="title" minlength="1" maxlength="255"
                            placeholder="Nhập tiêu đề video" value="<c:out value='${video.title}'/>" required />
                 </div>
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea class="form-control" id="description" name="description" rows="4"><c:out value="${video.description}"/></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="4" maxlength="5000"><c:out value="${video.description}"/></textarea>
+                    <small class="help-block">Mô tả tối đa 5.000 ký tự.</small>
                 </div>
                 <div class="form-group">
                     <label for="posterFile">Poster (upload từ máy tính):</label>
-                    <input type="file" class="form-control" id="posterFile" name="posterFile" accept="image/*" />
+                    <input type="file" class="form-control" id="posterFile" name="posterFile" accept="image/png,image/jpeg,image/gif,image/webp" />
+                    <small class="help-block">Chỉ nhận PNG, JPG, JPEG hoặc WEBP; tối đa 5MB.</small>
                 </div>
                 <div class="form-group">
                     <label>Status:</label><br/>
                     <label class="radio-inline">
-                        <input type="radio" name="active" value="1" ${video == null || video.active ? 'checked' : ''} /> Hoạt động
+                        <input type="radio" name="active" value="1" ${video == null || video.active ? 'checked' : ''} required /> Hoạt động
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="active" value="0" ${video != null && !video.active ? 'checked' : ''} /> Khóa

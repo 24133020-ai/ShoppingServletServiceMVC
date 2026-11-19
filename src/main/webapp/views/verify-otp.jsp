@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Kích hoạt tài khoản</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f4f7f6; padding-top: 60px; }
         .box { max-width: 440px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .box-title { text-align: center; font-size: 22px; font-weight: 600; margin-bottom: 20px; color: #333; }
@@ -27,7 +25,7 @@
             <div class="alert alert-info">${info}</div>
         </c:if>
         <c:if test="${alert != null}">
-            <div class="alert alert-danger">${alert}</div>
+            <div class="alert alert-danger"><c:out value="${alert}"/></div>
         </c:if>
 
         <form action="${pageContext.request.contextPath}/verify-otp" method="post">

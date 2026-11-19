@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sửa Video</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body { background-color: #f0f3f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header-bar { background-color: #0088cc; color: #fff; padding: 12px 25px; }
         .header-bar h3 { margin: 0; font-size: 22px; font-weight: bold; }
@@ -41,7 +39,7 @@
         <div class="panel-heading"><strong>Thông tin Video</strong></div>
         <div class="panel-body">
             <c:if test="${alert != null}">
-                <div class="alert alert-danger">${alert}</div>
+                <div class="alert alert-danger"><c:out value="${alert}"/></div>
             </c:if>
             <form action="<c:url value='/video/update'/>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="videoId" value="<c:out value='${video.videoId}'/>" />
@@ -51,12 +49,13 @@
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" maxlength="255"
+                    <input type="text" class="form-control" id="title" name="title" minlength="1" maxlength="255"
                            value="<c:out value='${video.title}'/>" required />
                 </div>
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea class="form-control" id="description" name="description" rows="4"><c:out value="${video.description}"/></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="4" maxlength="5000"><c:out value="${video.description}"/></textarea>
+                    <small class="help-block">Mô tả tối đa 5.000 ký tự.</small>
                 </div>
                 <div class="form-group">
                     <label>Poster hiện tại:</label><br/>
@@ -70,12 +69,13 @@
                 </div>
                 <div class="form-group">
                     <label for="posterFile">Đổi poster (upload từ máy tính):</label>
-                    <input type="file" class="form-control" id="posterFile" name="posterFile" accept="image/*" />
+                    <input type="file" class="form-control" id="posterFile" name="posterFile" accept="image/png,image/jpeg,image/gif,image/webp" />
+                    <small class="help-block">Chỉ nhận PNG, JPG, JPEG hoặc WEBP; tối đa 5MB.</small>
                 </div>
                 <div class="form-group">
                     <label>Status:</label><br/>
                     <label class="radio-inline">
-                        <input type="radio" name="active" value="1" ${video.active ? 'checked' : ''} /> Hoạt động
+                        <input type="radio" name="active" value="1" ${video.active ? 'checked' : ''} required /> Hoạt động
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="active" value="0" ${!video.active ? 'checked' : ''} /> Khóa

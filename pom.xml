@@ -22,6 +22,13 @@
         </dependency>
 
         <!-- Jakarta Servlet JSP API -->
+        <!-- SiteMesh 3 cho Jakarta EE 11 / Servlet 6.1 và Tomcat 11 -->
+        <dependency>
+            <groupId>org.sitemesh</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
@@ -29,7 +36,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Jakarta JSTL API & Implementation cho Tomcat 10.1 -->
+        <!-- Jakarta JSTL API & Implementation -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
@@ -74,7 +81,7 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- Gửi email OTP qua SMTP (Jakarta Mail - Angus Mail, tương thích Tomcat 10.1) -->
+        <!-- Gửi email OTP qua SMTP (Jakarta Mail - Angus Mail) -->
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>

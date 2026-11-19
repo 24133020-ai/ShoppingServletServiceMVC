@@ -16,6 +16,8 @@ bằng Java Servlet, JSP và mô hình MVC.
 - Quản lý danh mục sản phẩm
 - Thêm, sửa, xóa và xem danh sách danh mục
 - Upload hình ảnh danh mục
+- Dùng SiteMesh 3.3.0 với một Bootstrap 3.4.1 decorator dùng chung cho các trang HTML
+- Validation phía trình duyệt và phía Servlet cho Login, Register, Forgot Password, Insert và Edit (danh mục/video)
 
 ## 3. Luồng OTP
 | Chức năng | URL | Mô tả |
@@ -31,35 +33,51 @@ Quy tắc OTP: 6 chữ số, hiệu lực 5 phút, sai tối đa 5 lần, gửi 
 (chỉnh trong `vn.iotstar.util.Constant`).
 
 ## 4. Cấu hình và chạy dự án
-1. Cài đặt JDK 22, Maven và Tomcat 10.1.
+1. Cài đặt JDK 22, Maven và Tomcat 11 (ứng dụng đang dùng Jakarta Servlet 6.1).
 2. Mở dự án bằng IntelliJ IDEA hoặc Eclipse.
-3. Cấu hình kết nối SQL Server (`persistence.xml`) và chạy `database.sql`
-   (script tự thêm các cột `active`, `otp*` cho bảng `User` cũ).
-4. Cấu hình gửi email (xem mục 5).
-5. Chạy lệnh:
+3. Chạy `database.sql` trong SQL Server Management Studio (script tạo/cập nhật các bảng `User`, `categories`, `videos`).
+4. Thiết lập biến môi trường cho cửa sổ PowerShell sẽ chạy Tomcat:
+
+   ```powershell
+   $env:DB_USER = "tai_khoan_sql_server"
+   $env:DB_PASSWORD = "mat_khau_sql_server"
+   # Nếu SQL Server dùng instance/port khác, có thể cấu hình thêm:
+   # $env:DB_URL = "jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=ShoppingServiceMVC"
+   ```
+
+5. Cấu hình gửi email (xem mục 5). Nếu chưa cấu hình MAIL_USERNAME/MAIL_PASSWORD, OTP được in trong console Tomcat để kiểm thử ở chế độ DEV.
+6. Chạy lệnh:
 
    mvn clean package
 
-6. Deploy file WAR trong thư mục target
-   lên Apache Tomcat.
+7. Deploy file WAR trong thư mục `target` lên Apache Tomcat 11.
 
 ## 5. Cấu hình gửi email
-Copy `src/main/resources/mail.properties.example` thành `src/main/resources/mail.properties`
-rồi điền tài khoản SMTP (Gmail cần bật xác minh 2 bước và tạo **App password**).
-Hoặc dùng biến môi trường `MAIL_USERNAME`, `MAIL_PASSWORD` (ưu tiên hơn file).
-File `mail.properties` đã được thêm vào `.gitignore`, **không commit lên GitHub**.
+Khuyến nghị dùng biến môi trường `MAIL_USERNAME` và `MAIL_PASSWORD` (Google App Password):
 
-Ở đây em không thể up địa chỉ mail với app password thật lên được vì sẽ bị các vấn đề về bảo mật cũng như bị lộ có thể bị kẻ xấu lợi dụng để spam mail rác dẫn đến khóa tài khoản, mong thầy thông cảm cho em ạ.
+```powershell
+$env:MAIL_USERNAME = "gmail_gui_otp@gmail.com"
+$env:MAIL_PASSWORD = "google_app_password"
+```
 
-Em xin cam đoan rằng các yêu cầu được thầy đặt ra đều có thể hoạt động được bình thường, khi thầy chấm điểm có thể yêu cầu em up file lên để chạy thử chương trình ạ, em cảm ơn thầy rất nhiều.
+Có thể cấu hình thêm `MAIL_HOST` và `MAIL_PORT`; mặc định là `smtp.gmail.com:587`.
+Không commit App Password hoặc file `mail.properties` lên GitHub. File cấu hình mẫu là `mail.properties.example`.
 
 Nếu chưa cấu hình, ứng dụng chạy chế độ DEV: mã OTP được in ra console của Tomcat
 (dòng bắt đầu bằng `[MAIL][DEV]`) thay vì gửi email thật.
 
-## 6. Truy cập website
+## 6. SiteMesh và validation
+- Maven dependency: `org.sitemesh:sitemesh:3.3.0`.
+- SiteMesh 3 được đăng ký trong `WEB-INF/web.xml` bằng `ConfigurableSiteMeshFilter`.
+- Cấu hình mapping nằm tại `WEB-INF/sitemesh3.xml`.
+- Bootstrap decorator dùng chung nằm tại `WEB-INF/decorators/bootstrap.html`.
+- Các form kiểm tra dữ liệu ở cả HTML5 và Servlet trước khi gọi Service/DAO.
+- Các form CRUD danh mục và video kiểm tra độ dài, định dạng mã/tên và loại file ảnh; giới hạn upload ảnh là 5MB.
+
+## 7. Truy cập website
 http://localhost:8080/ShoppingServletServiceMVC/login
 
-## 7. Tài khoản thử nghiệm
+## 8. Tài khoản thử nghiệm
 Tài khoản để  test danh mục sản phẩm: admin
 Mật khẩu: 123456
 

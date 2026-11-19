@@ -11,7 +11,7 @@ public class Video implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "videoId")
+    @Column(name = "videoId", columnDefinition = "NVARCHAR(50) NOT NULL")
     private String videoId;
 
     @Column(name = "active")

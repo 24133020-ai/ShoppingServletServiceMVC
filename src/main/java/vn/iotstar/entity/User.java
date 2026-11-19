@@ -19,7 +19,7 @@ public class User implements Serializable {
     @Column(name = "email", columnDefinition = "NVARCHAR(255) NOT NULL")
     private String email;
 
-    @Column(name = "username", columnDefinition = "NVARCHAR(50) NOT NULL UNIQUE")
+    @Column(name = "username", columnDefinition = "NVARCHAR(50) NOT NULL", unique = true)
     private String userName;
 
     @Column(name = "fullname", columnDefinition = "NVARCHAR(100) NOT NULL")

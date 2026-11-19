@@ -6,9 +6,7 @@
     <meta charset="UTF-8">
     <title>Đăng nhập hệ thống</title>
     <!-- Bootstrap 3 CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+<style>
         body {
             background-color: #f4f7f6;
             padding-top: 60px;
@@ -51,24 +49,24 @@
         <h2 class="login-title">Đăng Nhập Vào Hệ Thống</h2>
 
         <c:if test="${success != null}">
-            <div class="alert alert-success">${success}</div>
+            <div class="alert alert-success"><c:out value="${success}"/></div>
         </c:if>
         <c:if test="${alert != null}">
-            <div class="alert alert-danger">${alert}</div>
+            <div class="alert alert-danger"><c:out value="${alert}"/></div>
         </c:if>
 
         <form action="${pageContext.request.contextPath}/login" method="post">
             <section class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" placeholder="Tài khoản" name="username" class="form-control" value="<c:out value='${rememberedUsername}'/>" required />
+                    <input type="text" placeholder="Tài khoản" name="username" class="form-control" maxlength="50" autocomplete="username" value="<c:out value='${rememberedUsername}'/>" required aria-describedby="usernameHelp" />
                 </div>
             </section>
 
             <section class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                    <input type="password" placeholder="Mật khẩu" name="password" class="form-control" required />
+                    <input type="password" placeholder="Mật khẩu" name="password" class="form-control" minlength="6" maxlength="128" autocomplete="current-password" required />
                 </div>
             </section>
 

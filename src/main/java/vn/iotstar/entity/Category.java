@@ -19,7 +19,7 @@ public class Category implements Serializable {
     @Column(name = "categoryname", columnDefinition = "NVARCHAR(255) NULL")
     private String categoryname;
 
-    @Column(name = "images", columnDefinition = "NVARCHAR(255) NULL")
+    @Column(name = "images", columnDefinition = "NVARCHAR(500) NULL")
     private String images;
 
     @Column(name = "status")

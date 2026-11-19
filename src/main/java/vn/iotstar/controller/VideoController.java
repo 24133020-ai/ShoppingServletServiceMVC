@@ -18,6 +18,7 @@ import vn.iotstar.entity.Video;
 import vn.iotstar.service.IVideoService;
 import vn.iotstar.service.impl.VideoServiceImpl;
 import vn.iotstar.util.Constant;
+import vn.iotstar.util.FormValidationUtil;
 
 /**
  * CRUD Video của user đang đăng nhập, danh sách phân trang 6 video / trang tại /video,
@@ -115,10 +116,17 @@ public class VideoController extends HttpServlet {
             video.setUser(user);
 
             String error = null;
+            String description = video.getDescription();
             if (videoId.isEmpty() || title.isEmpty()) {
-                error = "Vui lòng nhập Video ID và Title.";
-            } else if (!videoId.matches("[A-Za-z0-9_-]{1,50}")) {
-                error = "Video ID chỉ gồm chữ, số, dấu - và _ (tối đa 50 ký tự).";
+                error = "Vui lòng nhập Video ID và tiêu đề video.";
+            } else if (!FormValidationUtil.isVideoId(videoId)) {
+                error = "Video ID chỉ gồm chữ không dấu, số, dấu - và _ (tối đa 50 ký tự).";
+            } else if (title.length() > 255) {
+                error = "Tiêu đề video không được vượt quá 255 ký tự.";
+            } else if (description != null && description.length() > 5000) {
+                error = "Mô tả video không được vượt quá 5.000 ký tự.";
+            } else if (!FormValidationUtil.isValidStatus(req.getParameter("active"))) {
+                error = "Vui lòng chọn trạng thái video hợp lệ.";
             } else if (videoService.findById(videoId) != null) {
                 error = "Video ID đã tồn tại!";
             }
@@ -155,7 +163,13 @@ public class VideoController extends HttpServlet {
             video.setDescription(req.getParameter("description"));
             video.setActive("1".equals(req.getParameter("active")));
 
-            String error = title.isEmpty() ? "Vui lòng nhập Title." : null;
+            String description = video.getDescription();
+            String error = title.isEmpty() ? "Vui lòng nhập tiêu đề video."
+                    : (title.length() > 255 ? "Tiêu đề video không được vượt quá 255 ký tự."
+                    : (description != null && description.length() > 5000
+                    ? "Mô tả video không được vượt quá 5.000 ký tự."
+                    : (!FormValidationUtil.isValidStatus(req.getParameter("active"))
+                    ? "Vui lòng chọn trạng thái video hợp lệ." : null)));
             if (error == null) {
                 try {
                     video.setPoster(savePoster(req, oldPoster));
@@ -182,8 +196,8 @@ public class VideoController extends HttpServlet {
                 || part.getSubmittedFileName().trim().isEmpty()) {
             return oldPoster;
         }
-        if (part.getContentType() == null || !part.getContentType().startsWith("image/")) {
-            throw new IllegalArgumentException("Poster phải là file ảnh.");
+        if (!FormValidationUtil.isValidImageUpload(part)) {
+            throw new IllegalArgumentException("Poster phải là ảnh PNG, JPG, JPEG, GIF hoặc WEBP.");
         }
 
         String uploadPath = Constant.DIR + File.separator + "video";
@@ -192,10 +206,10 @@ public class VideoController extends HttpServlet {
             uploadDir.mkdirs();
         }
 
-        String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+        String filename = Paths.get(part.getSubmittedFileName().replace('\\', '/')).getFileName().toString();
         int index = filename.lastIndexOf(".");
-        String ext = (index != -1) ? filename.substring(index + 1) : "png";
-        String fname = System.currentTimeMillis() + "." + ext;
+        String ext = filename.substring(index + 1).toLowerCase(java.util.Locale.ROOT);
+        String fname = java.util.UUID.randomUUID().toString().replace("-", "") + "." + ext;
         part.write(uploadPath + File.separator + fname);
 
         if (oldPoster != null && !oldPoster.isEmpty()) {
