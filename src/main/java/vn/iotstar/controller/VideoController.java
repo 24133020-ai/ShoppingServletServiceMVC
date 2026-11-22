@@ -41,15 +41,19 @@ public class VideoController extends HttpServlet {
         String path = req.getServletPath();
 
         if (path.equals("/video")) {
-            // Danh sách video của user, phân trang
-            int total = videoService.countByUser(user.getId());
+            String filter = req.getParameter("filter");
+            boolean onlyMy = "my".equalsIgnoreCase(filter);
+            int total = onlyMy ? videoService.countByUser(user.getId()) : videoService.countAll();
             int totalPages = Math.max(1, (int) Math.ceil((double) total / Constant.VIDEO_PAGE_SIZE));
             int page = parsePage(req.getParameter("page"), totalPages);
-            List<Video> list = videoService.findByUser(user.getId(), page - 1, Constant.VIDEO_PAGE_SIZE);
+            List<Video> list = onlyMy 
+                    ? videoService.findByUser(user.getId(), page - 1, Constant.VIDEO_PAGE_SIZE)
+                    : videoService.findAll(page - 1, Constant.VIDEO_PAGE_SIZE);
 
             req.setAttribute("listvideo", list);
             req.setAttribute("currentPage", page);
             req.setAttribute("totalPages", totalPages);
+            req.setAttribute("filter", onlyMy ? "my" : "all");
             if ("toolarge".equals(req.getParameter("msg"))) {
                 req.setAttribute("alert", "File poster quá lớn (tối đa 5MB).");
             }
@@ -234,13 +238,19 @@ public class VideoController extends HttpServlet {
         return findOwnVideo(req, user, req.getParameter("id"));
     }
 
-    /** Chỉ trả về video nếu thuộc về user đang đăng nhập. */
+    /** Trả về video nếu thuộc quyền quản lý: Admin quản lý tất cả, User quản lý video của chính mình. */
     private Video findOwnVideo(HttpServletRequest req, User user, String id) {
         if (id == null || id.trim().isEmpty()) {
             return null;
         }
         Video video = videoService.findById(id.trim());
-        if (video == null || video.getUser() == null || video.getUser().getId() != user.getId()) {
+        if (video == null) {
+            return null;
+        }
+        if (user.getRoleid() == 1 || user.getRoleid() == 2) {
+            return video; // Admin/Manager có toàn quyền
+        }
+        if (video.getUser() == null || video.getUser().getId() != user.getId()) {
             return null;
         }
         return video;

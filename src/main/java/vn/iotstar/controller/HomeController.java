@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.iotstar.service.ICategoryService;
 import vn.iotstar.service.IVideoService;
+import vn.iotstar.service.impl.CategoryServiceImpl;
 import vn.iotstar.service.impl.VideoServiceImpl;
 import vn.iotstar.util.Constant;
 
@@ -17,6 +19,7 @@ import vn.iotstar.util.Constant;
 @WebServlet(urlPatterns = "/home")
 public class HomeController extends HttpServlet {
     public IVideoService videoService = new VideoServiceImpl();
+    public ICategoryService cateService = new CategoryServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req,
@@ -33,10 +36,10 @@ public class HomeController extends HttpServlet {
             return;
         }
 
-        // 10 video mới nhất hiển thị trên trang chủ
+        // Cả Admin và User đều xem được Danh mục sản phẩm và Video mới nhất trên Trang chủ
+        req.setAttribute("categories", cateService.findAll());
         req.setAttribute("newestVideos", videoService.findNewest(Constant.HOME_VIDEO_COUNT));
 
-        // Chuyển đến trang chủ dành cho User
         req.getRequestDispatcher("/views/home.jsp")
            .forward(req, resp);
     }

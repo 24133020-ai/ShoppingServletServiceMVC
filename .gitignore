@@ -11,5 +11,6 @@ target/
 .project
 .vscode/
 
-# Cấu hình chứa mật khẩu email - KHÔNG commit
+# Cấu hình chứa mật khẩu email & Cloudinary - KHÔNG commit
 src/main/resources/mail.properties
+src/main/resources/cloudinary.properties

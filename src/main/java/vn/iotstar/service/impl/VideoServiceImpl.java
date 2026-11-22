@@ -48,6 +48,16 @@ public class VideoServiceImpl implements IVideoService {
     }
 
     @Override
+    public List<Video> findAll(int page, int pagesize) {
+        return videoDao.findAll(page, pagesize);
+    }
+
+    @Override
+    public int countAll() {
+        return videoDao.countAll();
+    }
+
+    @Override
     public int countByUser(int userId) {
         return videoDao.countByUser(userId);
     }

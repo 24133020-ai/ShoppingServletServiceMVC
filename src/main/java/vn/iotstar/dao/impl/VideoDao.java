@@ -119,6 +119,31 @@ public class VideoDao implements IVideoDao {
     }
 
     @Override
+    public List<Video> findAll(int page, int pagesize) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        try {
+            String jpql = "SELECT v FROM Video v LEFT JOIN FETCH v.user ORDER BY v.createdDate DESC";
+            TypedQuery<Video> query = enma.createQuery(jpql, Video.class);
+            query.setFirstResult(page * pagesize);
+            query.setMaxResults(pagesize);
+            return query.getResultList();
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
+    public int countAll() {
+        EntityManager enma = JpaConfig.getEntityManager();
+        try {
+            Query query = enma.createQuery("SELECT count(v) FROM Video v");
+            return ((Long) query.getSingleResult()).intValue();
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
     public int countByUser(int userId) {
         EntityManager enma = JpaConfig.getEntityManager();
         try {

@@ -8,13 +8,15 @@ public class Constant {
     public static final String SESSION_USERNAME = "username";
     public static final String COOKIE_REMEMBER = "username";
 
-    // Session key lưu email đang chờ xác thực OTP (kích hoạt / quên mật khẩu)
+    // Session key lưu email đang chờ xác thực OTP (kích hoạt / quên mật khẩu / đổi email)
     public static final String SESSION_OTP_EMAIL = "otpEmail";
     public static final String SESSION_RESET_EMAIL = "resetEmail";
+    public static final String SESSION_NEW_EMAIL = "pendingNewEmail";
 
     // OTP
     public static final String PURPOSE_ACTIVATE = "ACTIVATE";
     public static final String PURPOSE_RESET = "RESET";
+    public static final String PURPOSE_UPDATE_EMAIL = "UPDATE_EMAIL";
     public static final int OTP_LENGTH = 6;
     public static final int OTP_EXPIRE_MINUTES = 5;      // OTP có hiệu lực 5 phút
     public static final int OTP_MAX_ATTEMPTS = 5;        // nhập sai tối đa 5 lần
@@ -40,5 +42,8 @@ public class Constant {
         public static final String VIDEO_ADD = "/views/video-add.jsp";
         public static final String VIDEO_EDIT = "/views/video-edit.jsp";
         public static final String VIDEO_DETAIL = "/views/video-detail.jsp";
+        public static final String PROFILE = "/views/profile.jsp";
+        public static final String VERIFY_EMAIL_OTP = "/views/verify-email-otp.jsp";
+        public static final String ADMIN_USER_LIST = "/views/admin/user-list.jsp";
     }
 }

@@ -103,6 +103,56 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User findById(int id) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        try {
+            return enma.find(User.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
+    public List<User> findAll() {
+        EntityManager enma = JpaConfig.getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u ORDER BY u.id DESC";
+            TypedQuery<User> query = enma.createQuery(jpql, User.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
+        try {
+            trans.begin();
+            User user = enma.find(User.class, id);
+            if (user != null) {
+                enma.remove(user);
+            }
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (trans.isActive()) {
+                trans.rollback();
+            }
+            throw e;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
     public boolean checkExistPhone(String phone) {
         EntityManager enma = JpaConfig.getEntityManager();
         try {

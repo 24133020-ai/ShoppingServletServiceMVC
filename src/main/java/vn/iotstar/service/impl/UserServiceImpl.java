@@ -3,6 +3,7 @@ package vn.iotstar.service.impl;
 import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import vn.iotstar.dao.UserDao;
 import vn.iotstar.dao.impl.UserDaoImpl;
 import vn.iotstar.entity.User;
@@ -140,6 +141,76 @@ public class UserServiceImpl implements UserService {
         OtpResult result = verifyOtp(user, Constant.PURPOSE_RESET, otp);
         if (result == OtpResult.OK) {
             user.setPassWord(PasswordUtil.hash(newPassword));
+            clearOtp(user);
+            userDao.update(user);
+        }
+        return result;
+    }
+
+    @Override
+    public void update(User user) {
+        userDao.update(user);
+    }
+
+    @Override
+    public User findById(int id) {
+        return userDao.findById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public void toggleUserStatus(int userId) {
+        User u = userDao.findById(userId);
+        if (u != null) {
+            u.setActive(!u.isActive());
+            userDao.update(u);
+        }
+    }
+
+    @Override
+    public void changeUserRole(int userId, int newRole) {
+        User u = userDao.findById(userId);
+        if (u != null) {
+            u.setRoleid(newRole);
+            userDao.update(u);
+        }
+    }
+
+    @Override
+    public OtpResult sendUpdateEmailOtp(User user, String newEmail) {
+        if (user == null || newEmail == null || newEmail.isBlank()) {
+            return OtpResult.NOT_FOUND;
+        }
+        // Chống spam: gửi lại sau OTP_RESEND_SECONDS
+        if (user.getOtpExpiry() != null && Constant.PURPOSE_UPDATE_EMAIL.equals(user.getOtpPurpose())) {
+            LocalDateTime sentAt = user.getOtpExpiry().minusMinutes(Constant.OTP_EXPIRE_MINUTES);
+            if (Duration.between(sentAt, LocalDateTime.now()).getSeconds() < Constant.OTP_RESEND_SECONDS) {
+                return OtpResult.TOO_SOON;
+            }
+        }
+
+        String otp = OtpUtil.generate();
+        user.setOtpCode(otp);
+        user.setOtpPurpose(Constant.PURPOSE_UPDATE_EMAIL);
+        user.setOtpExpiry(LocalDateTime.now().plusMinutes(Constant.OTP_EXPIRE_MINUTES));
+        user.setOtpAttempts(0);
+        userDao.update(user);
+
+        return EmailUtil.sendOtp(newEmail, otp, "Xác nhận cập nhật Email mới") ? OtpResult.OK : OtpResult.MAIL_ERROR;
+    }
+
+    @Override
+    public OtpResult verifyAndUpdateEmail(User user, String newEmail, String otp) {
+        if (user == null) {
+            return OtpResult.NOT_FOUND;
+        }
+        OtpResult result = verifyOtp(user, Constant.PURPOSE_UPDATE_EMAIL, otp);
+        if (result == OtpResult.OK) {
+            user.setEmail(newEmail);
             clearOtp(user);
             userDao.update(user);
         }

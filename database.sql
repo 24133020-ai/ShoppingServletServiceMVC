@@ -19,7 +19,7 @@ BEGIN
         [username] NVARCHAR(50) NOT NULL UNIQUE,
         [fullname] NVARCHAR(100) NOT NULL,
         [password] NVARCHAR(255) NOT NULL, -- lưu chuỗi đã băm PBKDF2 (pbkdf2$vòng lặp$salt$hash)
-        [avatar] NVARCHAR(255) NULL,
+        [avatar] NVARCHAR(500) NULL,
         [roleid] INT NOT NULL DEFAULT 3, -- 1: Admin, 2: Manager, 3: User
         [phone] NVARCHAR(20) NULL,
         [createdDate] DATE NULL,

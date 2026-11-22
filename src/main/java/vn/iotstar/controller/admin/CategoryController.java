@@ -26,7 +26,7 @@ import vn.iotstar.util.FormValidationUtil;
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = { "/admin/categories", "/admin/category/add", "/admin/category/insert",
-        "/admin/category/edit", "/admin/category/update", "/admin/category/delete", "/admin/category/list" })
+        "/admin/category/edit", "/admin/category/update", "/admin/category/delete", "/admin/category/list", "/categories" })
 public class CategoryController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final ICategoryService cateService = new CategoryServiceImpl();
@@ -34,15 +34,32 @@ public class CategoryController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
-        if ("/admin/categories".equals(path) || "/admin/category/list".equals(path)) {
+        if ("/admin/categories".equals(path) || "/admin/category/list".equals(path) || "/categories".equals(path)) {
             List<Category> list = cateService.findAll();
             req.setAttribute("listcate", list);
             req.setAttribute("cateList", list);
             if ("toolarge".equals(req.getParameter("msg"))) {
                 req.setAttribute("alert", "Ảnh tải lên vượt quá giới hạn 5MB.");
+            } else if ("forbidden".equals(req.getParameter("msg"))) {
+                req.setAttribute("alert", "Bạn không có quyền quản trị để thực hiện thao tác này.");
             }
             req.getRequestDispatcher("/views/admin/category-list.jsp").forward(req, resp);
-        } else if ("/admin/category/add".equals(path)) {
+            return;
+        }
+
+        // Kiểm tra phân quyền cho các thao tác Thêm, Sửa, Xóa
+        jakarta.servlet.http.HttpSession session = req.getSession(false);
+        vn.iotstar.entity.User account = (session != null) ? (vn.iotstar.entity.User) session.getAttribute("account") : null;
+        if (account == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        if (account.getRoleid() != 1 && account.getRoleid() != 2) {
+            resp.sendRedirect(req.getContextPath() + "/categories?msg=forbidden");
+            return;
+        }
+
+        if ("/admin/category/add".equals(path)) {
             req.getRequestDispatcher("/views/admin/category-add.jsp").forward(req, resp);
         } else if ("/admin/category/edit".equals(path)) {
             Integer id = parsePositiveInt(req.getParameter("id"));
